@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uol.compass.customer.dto.request.CustomerRequest;
@@ -19,7 +20,7 @@ public class CustomerController {
     private final CustomerService service;
 
     @PostMapping
-    public CustomerResponse createCustomer(@Valid CustomerRequest request) {
+    public CustomerResponse createCustomer(@Valid @RequestBody CustomerRequest request) {
         return this.service.createCustomer(request);
     }
 
