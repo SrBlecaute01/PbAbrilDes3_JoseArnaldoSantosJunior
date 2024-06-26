@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface CustomerRepository extends CrudRepository<Customer, UUID> {
 
+    boolean existsByEmailIgnoreCaseOrCpf(String email, String cpf);
 
 }
