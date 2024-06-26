@@ -1,13 +1,13 @@
-package uol.compass.payments;
+package uol.compass.calculate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MsPaymentsApplication {
+public class CalculateApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MsPaymentsApplication.class, args);
+        SpringApplication.run(CalculateApplication.class, args);
     }
 
 }
