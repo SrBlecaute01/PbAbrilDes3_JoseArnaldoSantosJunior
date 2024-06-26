@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uol.compass.customer.constants.Gender;
 
+import java.util.Date;
+
 @Getter @Setter
 @NoArgsConstructor
 @Entity(name = "customer")
@@ -28,7 +30,10 @@ public class Customer {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false, columnDefinition = "integer default 0")
+    @Column(nullable = false)
+    private Date birthDate;
+
+    @Column(nullable = false)
     private Integer points;
 
 }

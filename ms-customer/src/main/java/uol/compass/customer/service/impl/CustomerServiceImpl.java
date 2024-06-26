@@ -24,8 +24,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerAlreadyExistsException();
         }
 
-        final var customer = this.repository.save(mapper.map(request, Customer.class));
-        return mapper.map(customer, CustomerResponse.class);
+        final var customer = this.mapper.map(request, Customer.class);
+        customer.setPoints(0);
+
+        return this.mapper.map(this.repository.save(customer), CustomerResponse.class);
     }
 
 }

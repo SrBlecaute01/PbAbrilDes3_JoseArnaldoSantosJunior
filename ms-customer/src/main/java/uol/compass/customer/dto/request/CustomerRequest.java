@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 import uol.compass.customer.constants.Gender;
 
-import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 public class CustomerRequest {
@@ -29,6 +29,6 @@ public class CustomerRequest {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "birthDate must be informed")
-    private LocalTime birthDate;
+    private Date birthDate;
 
 }
