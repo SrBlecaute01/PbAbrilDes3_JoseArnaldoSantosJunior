@@ -8,4 +8,10 @@ public interface CustomerService {
 
     CustomerResponse createCustomer(@NotNull CustomerRequest request);
 
+    CustomerResponse getCustomer(@NotNull Long id);
+
+    CustomerResponse updateCustomer(@NotNull Long id, @NotNull CustomerRequest request);
+
+    void deleteCustomer(@NotNull Long id);
+
 }
