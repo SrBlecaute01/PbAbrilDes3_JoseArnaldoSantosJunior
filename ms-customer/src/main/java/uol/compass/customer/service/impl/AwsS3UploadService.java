@@ -1,11 +1,14 @@
 package uol.compass.customer.service.impl;
 
-import com.amazonaws.services.s3.AmazonS3;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.exception.SdkException;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import uol.compass.customer.exception.file.FileUploadException;
 import uol.compass.customer.exception.file.InvalidBase64FileException;
 import uol.compass.customer.exception.file.InvalidFileTypeException;
@@ -13,9 +16,7 @@ import uol.compass.customer.service.FileUploadService;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.net.URLConnection;
-import java.nio.file.Files;
 import java.util.Base64;
 
 @Slf4j
@@ -23,7 +24,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class AwsS3UploadService implements FileUploadService {
 
-    private final AmazonS3 s3;
+    private final S3Client client;
 
     @Value("${aws.bucket.name}")
     private String bucketName;
@@ -32,26 +33,29 @@ public class AwsS3UploadService implements FileUploadService {
     private String folderName;
 
     @Override
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public String uploadBase64File(String fileName, String base64) {
         try {
             final var decodedPhoto = Base64.getDecoder().decode(base64);
-            final var extension = getExtensionFromBase64(decodedPhoto);
-
-            File file = null;
-            try {
-                file = File.createTempFile(fileName, "." + extension);
-                Files.write(file.toPath(), decodedPhoto);
-                return this.uploadFile(fileName, file);
-            } catch (IOException exception) {
-                log.warn("Error uploading file", exception);
-                throw new FileUploadException();
-            } finally {
-                if (file != null) file.delete();
+            final var extension = this.getExtensionFromBase64(decodedPhoto);
+            if (!extension.equals("png") && !extension.equals("jpeg")) {
+                throw new InvalidFileTypeException();
             }
+
+            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName) + "." + extension;
+            final var request = PutObjectRequest.builder()
+                    .bucket(this.bucketName)
+                    .key(path)
+                    .contentType("image/" + extension)
+                    .build();
+
+            this.client.putObject(request, RequestBody.fromBytes(decodedPhoto));
+            return this.client.utilities().getUrl(url -> url.bucket(this.bucketName).key(path)).toExternalForm();
 
         } catch (IllegalArgumentException exception) {
             throw new InvalidBase64FileException();
+        } catch (SdkException exception) {
+            log.warn("Error uploading file", exception);
+            throw new FileUploadException();
         }
     }
 
@@ -63,9 +67,15 @@ public class AwsS3UploadService implements FileUploadService {
         }
 
         try {
-            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName) + "." + extension;
-            this.s3.putObject(this.bucketName, path, file);
-            return this.s3.getUrl(this.bucketName, path).toExternalForm();
+            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName);
+            final var request = PutObjectRequest.builder()
+                    .bucket(this.bucketName)
+                    .key(path)
+                    .build();
+
+            this.client.putObject(request, RequestBody.fromFile(file));
+            return this.client.utilities().getUrl(url -> url.bucket(this.bucketName).key(path)).toExternalForm();
+
         } catch (Exception exception) {
             log.warn("Error uploading file", exception);
             throw new FileUploadException();
