@@ -31,6 +31,9 @@ public class Customer {
     private String email;
 
     @Column(nullable = false)
+    private String photo;
+
+    @Column(nullable = false)
     private Date birthDate;
 
     @Column(nullable = false)

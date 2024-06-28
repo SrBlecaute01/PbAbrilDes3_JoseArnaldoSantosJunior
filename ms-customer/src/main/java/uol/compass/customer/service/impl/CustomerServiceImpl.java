@@ -1,6 +1,7 @@
 package uol.compass.customer.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -11,12 +12,19 @@ import uol.compass.customer.exception.customer.CustomerNotFoundException;
 import uol.compass.customer.model.Customer;
 import uol.compass.customer.repository.CustomerRepository;
 import uol.compass.customer.service.CustomerService;
+import uol.compass.customer.service.FileUploadService;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository repository;
+    private final FileUploadService uploadService;
+
     private final ModelMapper mapper;
 
     @Override
@@ -25,7 +33,11 @@ public class CustomerServiceImpl implements CustomerService {
             throw new CustomerAlreadyExistsException();
         }
 
+        final var fileName = UUID.nameUUIDFromBytes(request.getEmail().toLowerCase().getBytes(StandardCharsets.UTF_8));
+        final var url = this.uploadService.uploadBase64File(fileName.toString(), request.getPhoto());
         final var customer = this.mapper.map(request, Customer.class);
+
+        customer.setPhoto(url);
         customer.setPoints(0);
 
         return this.mapper.map(this.repository.save(customer), CustomerResponse.class);
@@ -41,20 +53,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse updateCustomer(@NotNull Long id, @NotNull CustomerRequest request) {
         final var customer = this.repository.findById(id).orElseThrow(CustomerNotFoundException::new);
-
-        if (!customer.getCpf().equals(request.getCpf()) &&
-                this.repository.existsByCpf(request.getCpf())) {
+        if (this.repository.existsByEmailOrCpf(request.getEmail(), request.getCpf(), id)) {
             throw new CustomerAlreadyExistsException();
         }
 
-        if (!customer.getEmail().equals(request.getEmail()) &&
-                this.repository.existsByEmailIgnoreCase(request.getEmail())) {
-            throw new CustomerAlreadyExistsException();
-        }
+        final var fileName = UUID.nameUUIDFromBytes(request.getEmail().toLowerCase().getBytes(StandardCharsets.UTF_8));
+        final var url = this.uploadService.uploadBase64File(fileName.toString(), request.getPhoto());
 
         customer.setCpf(request.getCpf());
         customer.setEmail(request.getEmail());
-
+        customer.setPhoto(url);
         customer.setName(request.getName());
         customer.setGender(request.getGender());
         customer.setBirthDate(request.getBirthDate());

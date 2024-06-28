@@ -27,6 +27,9 @@ public class CustomerRequest {
     @Email(message = "email must be valid")
     private String email;
 
+    @NotBlank(message = "photo must be informed")
+    private String photo;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     @NotNull(message = "birthDate must be informed")
     private Date birthDate;

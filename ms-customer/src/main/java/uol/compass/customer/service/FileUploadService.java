@@ -4,6 +4,8 @@ import java.io.File;
 
 public interface FileUploadService {
 
-    void uploadFile(File file);
+    String uploadBase64File(String fileName, String base64);
+
+    String uploadFile(String fileName, File file) throws InterruptedException;
 
 }

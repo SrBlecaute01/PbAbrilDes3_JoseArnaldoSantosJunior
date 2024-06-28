@@ -2,11 +2,13 @@ package uol.compass.customer.configuration;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.BasicSessionCredentials;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.codepipeline.model.AWSSessionCredentials;
+import com.amazonaws.services.connect.model.Credentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,19 +24,14 @@ public class AwsConfiguration {
 
     @Bean
     public AmazonS3 amazonS3() {
-        final var credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+        final var credentials = new BasicAWSCredentials(accessKey, secretKey);
         final var credentialsProvider = new AWSStaticCredentialsProvider(credentials);
 
-        return AmazonS3ClientBuilder
-                .standard()
+        return AmazonS3ClientBuilder.standard()
                 .withCredentials(credentialsProvider)
-                .withRegion(Regions.US_EAST_1)
+                .withPathStyleAccessEnabled(false)
+                .withChunkedEncodingDisabled(true)
                 .build();
-    }
-
-    @Bean
-    public TransferManager transferManager(AmazonS3 amazonS3) {
-        return TransferManagerBuilder.standard().withS3Client(amazonS3).build();
     }
 
 }
