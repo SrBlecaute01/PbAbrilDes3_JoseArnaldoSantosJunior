@@ -3,6 +3,10 @@ package uol.compass.calculate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,6 +27,11 @@ public class RuleController {
         final var rule = this.service.createRule(request);
         final var uri = UriComponentsBuilder.fromPath("/v1/rules/{id}").buildAndExpand(rule.getId()).toUri();
         return ResponseEntity.created(uri).body(rule);
+    }
+
+    @GetMapping
+    public PagedModel<RuleResponse> getRules(@PageableDefault Pageable pageable) {
+        return this.service.getRules(pageable);
     }
 
     @GetMapping("/{id}")
