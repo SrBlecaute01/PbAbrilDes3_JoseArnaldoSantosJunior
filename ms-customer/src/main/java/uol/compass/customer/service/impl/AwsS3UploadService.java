@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URLConnection;
 import java.util.Base64;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -32,12 +33,15 @@ public class AwsS3UploadService implements FileUploadService {
     @Value("${aws.bucket.folder}")
     private String folderName;
 
+    @Value("${photo.extensions}")
+    private List<String> availableExtensions;
+
     @Override
     public String uploadBase64File(String fileName, String base64) {
         try {
             final var decodedPhoto = Base64.getDecoder().decode(base64);
             final var extension = this.getExtensionFromBase64(decodedPhoto);
-            if (!extension.equals("png") && !extension.equals("jpeg")) {
+            if (!this.availableExtensions.contains(extension.toLowerCase())) {
                 throw new InvalidFileTypeException();
             }
 
@@ -62,7 +66,7 @@ public class AwsS3UploadService implements FileUploadService {
     @Override
     public String uploadFile(String fileName, File file){
         final var extension = this.getFileExtension(file);
-        if (!extension.equals("png") && !extension.equals("jpeg")) {
+        if (!this.availableExtensions.contains(extension.toLowerCase())) {
             throw new InvalidFileTypeException();
         }
 
