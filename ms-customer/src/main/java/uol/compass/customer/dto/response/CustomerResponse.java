@@ -14,6 +14,7 @@ public class CustomerResponse {
     private String name;
     private Gender gender;
     private String email;
+    private String photo;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
