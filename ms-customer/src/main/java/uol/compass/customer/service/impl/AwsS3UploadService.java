@@ -71,7 +71,7 @@ public class AwsS3UploadService implements FileUploadService {
         }
 
         try {
-            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName);
+            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName) + "." + extension;
             final var request = PutObjectRequest.builder()
                     .bucket(this.bucketName)
                     .key(path)
