@@ -9,6 +9,7 @@ import uol.compass.payments.client.CalculateClient;
 import uol.compass.payments.client.CustomerClient;
 import uol.compass.payments.dto.request.PaymentRequest;
 import uol.compass.payments.dto.response.PaymentResponse;
+import uol.compass.payments.exception.payment.PaymentNotFoundException;
 import uol.compass.payments.model.Payment;
 import uol.compass.payments.repository.PaymentRepository;
 import uol.compass.payments.service.PaymentService;
@@ -34,7 +35,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentResponse getPayment(UUID id) {
-        return null;
+        return this.repository.findById(id)
+                .map(payment -> this.mapper.map(payment, PaymentResponse.class))
+                .orElseThrow(PaymentNotFoundException::new);
     }
 
     @Override
