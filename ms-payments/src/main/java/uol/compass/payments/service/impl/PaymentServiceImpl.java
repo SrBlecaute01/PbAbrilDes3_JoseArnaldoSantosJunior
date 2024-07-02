@@ -42,6 +42,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PagedModel<PaymentResponse> getPaymentsByCustomer(Long customerId, Pageable pageable) {
-        return null;
+        return new PagedModel<>(this.repository.findByCustomerId(customerId, pageable)
+                .map(payment -> this.mapper.map(payment, PaymentResponse.class)));
     }
+
 }
