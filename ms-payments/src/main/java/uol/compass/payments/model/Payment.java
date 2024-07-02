@@ -25,7 +25,7 @@ public class Payment {
     private Long categoryId;
 
     @Column(nullable = false)
-    private Integer total;
+    private Integer value;
 
     @CreationTimestamp
     private Date createdAt;

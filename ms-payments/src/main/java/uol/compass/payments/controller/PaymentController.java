@@ -1,5 +1,6 @@
 package uol.compass.payments.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class PaymentController {
     private final PaymentService service;
 
     @PostMapping
-    public PaymentResponse createPayment(@RequestBody PaymentRequest request) {
+    public PaymentResponse createPayment(@Valid @RequestBody PaymentRequest request) {
         return service.createPayment(request);
     }
 

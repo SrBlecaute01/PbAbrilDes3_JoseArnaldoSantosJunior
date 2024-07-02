@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CalculateResponse {
 
-    private Long total;
+    private Integer total;
 
 }

@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class CalculateResponse {
 
-    private Long total;
+    private Integer total;
 
 }

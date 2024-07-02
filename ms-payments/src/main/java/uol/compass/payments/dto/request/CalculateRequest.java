@@ -7,6 +7,6 @@ import lombok.*;
 public class CalculateRequest {
 
     private Long categoryId;
-    private Long value;
+    private Integer value;
 
 }
