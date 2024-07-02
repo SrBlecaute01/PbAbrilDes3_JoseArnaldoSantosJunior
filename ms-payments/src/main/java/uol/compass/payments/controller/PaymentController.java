@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 import uol.compass.payments.dto.request.PaymentRequest;
 import uol.compass.payments.dto.response.PaymentResponse;
 import uol.compass.payments.service.PaymentService;
@@ -22,8 +24,10 @@ public class PaymentController {
     private final PaymentService service;
 
     @PostMapping
-    public PaymentResponse createPayment(@Valid @RequestBody PaymentRequest request) {
-        return service.createPayment(request);
+    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest request) {
+        final var payment = this.service.createPayment(request);
+        final var uri = UriComponentsBuilder.fromPath("/v1/payments/{id}").buildAndExpand(payment.getId()).toUri();
+        return ResponseEntity.created(uri).body(payment);
     }
 
     @GetMapping("/{id}")
