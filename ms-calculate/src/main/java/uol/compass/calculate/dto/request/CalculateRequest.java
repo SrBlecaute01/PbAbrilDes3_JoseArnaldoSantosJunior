@@ -13,6 +13,6 @@ public class CalculateRequest {
     private Long categoryId;
 
     @NotNull(message = "value must be informed")
-    private Long value;
+    private Integer value;
 
 }
