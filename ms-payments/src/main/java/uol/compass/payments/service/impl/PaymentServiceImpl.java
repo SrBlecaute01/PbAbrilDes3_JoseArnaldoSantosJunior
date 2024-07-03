@@ -7,11 +7,14 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import uol.compass.payments.client.CalculateClient;
 import uol.compass.payments.client.CustomerClient;
+import uol.compass.payments.dto.request.CalculateRequest;
 import uol.compass.payments.dto.request.PaymentRequest;
+import uol.compass.payments.dto.request.PointsRequest;
 import uol.compass.payments.dto.response.PaymentResponse;
 import uol.compass.payments.exception.payment.PaymentNotFoundException;
 import uol.compass.payments.model.Payment;
 import uol.compass.payments.repository.PaymentRepository;
+import uol.compass.payments.service.MessagingService;
 import uol.compass.payments.service.PaymentService;
 
 import java.util.UUID;
@@ -23,6 +26,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository repository;
     private final CustomerClient customerClient;
     private final CalculateClient calculateClient;
+    private final MessagingService messagingService;
+
     private final ModelMapper mapper;
 
     @Override
@@ -30,6 +35,9 @@ public class PaymentServiceImpl implements PaymentService {
         this.customerClient.getCustomer(request.getCustomerId());
 
         final var payment = this.repository.save(this.mapper.map(request, Payment.class));
+        final var calculate = this.calculateClient.calculate(new CalculateRequest(request.getCategoryId(), request.getValue()));
+        this.messagingService.sendPointsMessage(new PointsRequest(request.getCustomerId(), calculate.getTotal()));
+
         return this.mapper.map(payment, PaymentResponse.class);
     }
 
