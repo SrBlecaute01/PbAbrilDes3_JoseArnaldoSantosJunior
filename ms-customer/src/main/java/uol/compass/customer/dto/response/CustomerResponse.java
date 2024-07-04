@@ -2,6 +2,7 @@ package uol.compass.customer.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uol.compass.customer.constants.Gender;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(name = "Customer response", description = "The response to a customer request.")
 public class CustomerResponse {
 

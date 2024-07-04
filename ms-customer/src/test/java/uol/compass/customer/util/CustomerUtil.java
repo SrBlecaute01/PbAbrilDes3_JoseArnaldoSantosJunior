@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import org.assertj.core.util.DateUtil;
 import uol.compass.customer.constants.Gender;
 import uol.compass.customer.dto.request.CustomerRequest;
+import uol.compass.customer.dto.response.CustomerResponse;
 import uol.compass.customer.model.Customer;
 
 @UtilityClass
@@ -46,6 +47,17 @@ public class CustomerUtil {
             customer.getBirthDate());
 
     @Getter
+    private static final CustomerResponse response = new CustomerResponse(
+            customer.getId(),
+            customer.getCpf(),
+            customer.getName(),
+            customer.getGender(),
+            customer.getEmail(),
+            customer.getPhoto(),
+            customer.getBirthDate(),
+            customer.getPoints());
+
+    @Getter
     private static final CustomerRequest updateRequest = new CustomerRequest(
             updatedCustomer.getCpf(),
             updatedCustomer.getName(),
@@ -53,5 +65,17 @@ public class CustomerUtil {
             updatedCustomer.getEmail(),
             request.getPhoto(),
             updatedCustomer.getBirthDate());
+
+    @Getter
+    private static final CustomerResponse updateResponse = new CustomerResponse(
+            updatedCustomer.getId(),
+            updatedCustomer.getCpf(),
+            updatedCustomer.getName(),
+            updatedCustomer.getGender(),
+            updatedCustomer.getEmail(),
+            updatedCustomer.getPhoto(),
+            updatedCustomer.getBirthDate(),
+            updatedCustomer.getPoints());
+
 
 }
