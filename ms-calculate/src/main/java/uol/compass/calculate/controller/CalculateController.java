@@ -21,6 +21,12 @@ import uol.compass.calculate.service.CalculateService;
 @RequiredArgsConstructor
 @RequestMapping("v1/calculate")
 @Tag(name = "Calculate", description = "Operations responsible for calculating a value established in the rules.")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "400", description = "Bad Request",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
+        @ApiResponse(responseCode = "500", description = "Internal Server Error",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
+})
 public class CalculateController {
 
     private final CalculateService service;
@@ -30,8 +36,6 @@ public class CalculateController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Value calculated successfully.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CalculateResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input data.",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
             @ApiResponse(responseCode = "422", description = "Invalid input data.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
     })
