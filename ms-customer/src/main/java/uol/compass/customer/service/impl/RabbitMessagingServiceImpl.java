@@ -18,6 +18,7 @@ public class RabbitMessagingServiceImpl implements MessagingService {
     private final ObjectMapper objectMapper;
     private final CustomerRepository repository;
 
+    @Override
     @RabbitListener(queues = {"${rabbit.queue.name}"})
     public void receivePoints(@Payload String message) {
         try {

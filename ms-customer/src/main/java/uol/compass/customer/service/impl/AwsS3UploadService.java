@@ -2,7 +2,6 @@ package uol.compass.customer.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.exception.SdkException;
@@ -15,7 +14,7 @@ import uol.compass.customer.exception.file.InvalidFileTypeException;
 import uol.compass.customer.service.FileUploadService;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
+import java.io.IOException;
 import java.net.URLConnection;
 import java.util.Base64;
 import java.util.List;
@@ -63,41 +62,12 @@ public class AwsS3UploadService implements FileUploadService {
         }
     }
 
-    @Override
-    public String uploadFile(String fileName, File file){
-        final var extension = this.getFileExtension(file);
-        if (!this.availableExtensions.contains(extension.toLowerCase())) {
-            throw new InvalidFileTypeException();
-        }
-
-        try {
-            final var path = (this.folderName != null ? this.folderName + "/" + fileName : fileName) + "." + extension;
-            final var request = PutObjectRequest.builder()
-                    .bucket(this.bucketName)
-                    .key(path)
-                    .build();
-
-            this.client.putObject(request, RequestBody.fromFile(file));
-            return this.client.utilities().getUrl(url -> url.bucket(this.bucketName).key(path)).toExternalForm();
-
-        } catch (Exception exception) {
-            log.warn("Error uploading file", exception);
-            throw new FileUploadException();
-        }
-    }
-
-    @NotNull
-    private String getFileExtension(@NotNull File file) {
-        final var name = file.getName();
-        final var index = name.lastIndexOf(".");
-        return index == -1 || index == name.length() - 1 ? "" : name.substring(index + 1);
-    }
-
     private String getExtensionFromBase64(byte[] base64) {
         try (ByteArrayInputStream inputStream = new ByteArrayInputStream(base64)) {
             final var contentType = URLConnection.guessContentTypeFromStream(inputStream);
+            if (contentType == null) throw new InvalidFileTypeException();
             return contentType.split("/")[1];
-        } catch (Exception exception) {
+        } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException exception) {
             log.warn("Error reading file", exception);
             throw new InvalidFileTypeException();
         }
