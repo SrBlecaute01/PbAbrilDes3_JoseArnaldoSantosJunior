@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import uol.compass.calculate.dto.request.CalculateRequest;
 import uol.compass.calculate.exception.handler.RestExceptionHandler;
 import uol.compass.calculate.service.CalculateService;
 import uol.compass.calculate.util.CalculateUtil;
@@ -60,10 +61,9 @@ public class CalculateControllerTest {
     }
 
     @Test
-    @DisplayName("Controller calculate with invalid categoryId")
-    void testCalculateWithInvalidCategory() throws Exception {
-        final var request = CalculateUtil.getRequest();
-        request.setCategoryId(null);
+    @DisplayName("Controller calculate with empty categoryId")
+    void testCalculateWithEmptyCategory() throws Exception {
+        final var request = new CalculateRequest(null, 100);
 
         this.mockMvc.perform(post(PATH)
                         .contentType(MediaType.APPLICATION_JSON)
