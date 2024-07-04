@@ -6,12 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Schema(
-        name = "Calculate request.",
-        description = "Request schema to calculate a value."
-)
 @Getter @Setter
 @NoArgsConstructor
+@Schema(name = "Calculate request.", description = "Request schema to calculate a value.")
 public class CalculateRequest {
 
     @Schema(description = "The category id.", example = "1")

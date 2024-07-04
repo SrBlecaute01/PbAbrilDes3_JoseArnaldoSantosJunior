@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Schema(name = "Rule response", description = "The response to rule requests.")
 @Data
 @NoArgsConstructor
+@Schema(name = "Rule response", description = "The response to rule requests.")
 public class RuleResponse {
 
     @Schema(description = "The identifier.", example = "1")

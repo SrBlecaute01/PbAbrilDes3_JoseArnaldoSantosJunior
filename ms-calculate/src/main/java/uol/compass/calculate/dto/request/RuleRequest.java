@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-@Schema(name = "Rule request", description = "Request body to create or update a rule.")
 @Getter @Setter
 @NoArgsConstructor
+@Schema(name = "Rule request", description = "Request body to create or update a rule.")
 public class RuleRequest {
 
     @Schema(description = "The category name.", maxLength = 255, example = "electronic")

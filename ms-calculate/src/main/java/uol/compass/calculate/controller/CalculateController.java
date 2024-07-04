@@ -36,7 +36,7 @@ public class CalculateController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Value calculated successfully.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = CalculateResponse.class))),
-            @ApiResponse(responseCode = "422", description = "Invalid input data.",
+            @ApiResponse(responseCode = "422", description = "Method argument not valid.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
     })
     @PostMapping
