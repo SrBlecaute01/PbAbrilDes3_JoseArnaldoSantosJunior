@@ -23,7 +23,6 @@ import uol.compass.calculate.dto.response.RuleResponse;
 import uol.compass.calculate.exception.ApplicationException;
 import uol.compass.calculate.service.RuleService;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("v1/rules")
