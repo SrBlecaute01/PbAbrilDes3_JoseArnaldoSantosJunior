@@ -31,7 +31,7 @@ public class CalculateServiceTest {
     }
 
     @Test
-    @DisplayName("Test calculate with a existing rule.")
+    @DisplayName("Service calculate with a existing rule.")
     void testCalculateWithValidRule() {
         final var rule = RuleUtil.getRule();
         final var request = CalculateUtil.getRequest();
@@ -43,7 +43,7 @@ public class CalculateServiceTest {
     }
 
     @Test
-    @DisplayName("Test calculate with a non-existing rule.")
+    @DisplayName("Service calculate with a non-existing rule.")
     void testCalculateWithInvalidRule() {
         final var request = CalculateUtil.getRequest();
         when(this.ruleRepository.findById(request.getCategoryId())).thenReturn(Optional.empty());

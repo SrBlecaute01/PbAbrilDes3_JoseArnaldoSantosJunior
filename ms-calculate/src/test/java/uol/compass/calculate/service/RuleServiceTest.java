@@ -43,7 +43,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test create rule")
+    @DisplayName("Service create rule")
     void testCreateRule() {
         final var request = RuleUtil.getRequest();
         final var rule = RuleUtil.getRule();
@@ -59,7 +59,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test create a rule with existing category")
+    @DisplayName("Service create a rule with existing category")
     void testCreateRuleWithExistingCategory() {
         final var request = RuleUtil.getRequest();
 
@@ -68,7 +68,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test get rules")
+    @DisplayName("Service get rules")
     void testGetRules() {
         final var rule = RuleUtil.getRule();
         final var pageable = new PageImpl<>(List.of(rule));
@@ -84,7 +84,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test get rule by id")
+    @DisplayName("Service get rule by id")
     void testGetRule() {
         final var rule = RuleUtil.getRule();
 
@@ -97,7 +97,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test get rule by id not found")
+    @DisplayName("Service get rule by id not found")
     void testGetRuleNotFound() {
         final var rule = RuleUtil.getRule();
 
@@ -106,7 +106,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test update rule")
+    @DisplayName("Service update rule")
     void testUpdateRule() {
         final var updateRule = RuleUtil.getUpdateRule();
         final var updateRequest = RuleUtil.getUpdateRequest();
@@ -123,7 +123,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test update rule with existing category")
+    @DisplayName("Service update rule with existing category")
     void testUpdateRuleWithExistingCategory() {
         final var updateRule = RuleUtil.getUpdateRule();
         final var updateRequest = RuleUtil.getUpdateRequest();
@@ -135,7 +135,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test update rule not found")
+    @DisplayName("Service update rule not found")
     void testUpdateRuleNotFound() {
         final var updateRule = RuleUtil.getUpdateRule();
         final var updateRequest = RuleUtil.getUpdateRequest();
@@ -146,7 +146,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test delete rule")
+    @DisplayName("Service delete rule")
     void testDeleteRule() {
         final var rule = RuleUtil.getRule();
 
@@ -155,7 +155,7 @@ public class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("Test delete rule not found")
+    @DisplayName("Service delete rule not found")
     void testDeleteRuleNotFound() {
         final var rule = RuleUtil.getRule();
 
