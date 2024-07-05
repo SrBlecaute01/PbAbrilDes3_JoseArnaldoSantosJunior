@@ -64,7 +64,8 @@ services:
       - AWS_ACCESS_TOKEN=${AWS_ACCESS_TOKEN:-}
       - AWS_BUCKET_NAME=${AWS_BUCKET_NAME:-}
       - AWS_BUCKET_FOLDER=${AWS_BUCKET_FOLDER:-}
-      - RABBIT_HOST=${RABBIT_HOST:-localhost}
+      - AWS_REGION=${AWS_REGION:-}
+      - RABBIT_HOST=${RABBIT_HOST:-rabbitmq}
       - RABBIT_USER=${RABBIT_USER:-root}
       - RABBIT_PASSWORD=${RABBIT_PASSWORD:-admin}
       - RABBIT_QUEUE=${RABBIT_QUEUE:-points-request-queue}
@@ -93,9 +94,9 @@ services:
       - DB_NAME=${DB_NAME:-compass}
       - DB_USER=${DB_USER:-root}
       - DB_PASSWORD=${DB_PASSWORD:-admin}
-      - CALCULATE_HOST=${CALCULATE_HOST:-http://localhost:8080}
-      - CUSTOMER_HOST=${CUSTOMER_HOST:-http://localhost:8081}
-      - RABBIT_HOST=${RABBIT_HOST:-localhost}
+      - CALCULATE_HOST=${CALCULATE_HOST:-http://ms-calculate:8080}
+      - CUSTOMER_HOST=${CUSTOMER_HOST:-http://ms-customer:8081}
+      - RABBIT_HOST=${RABBIT_HOST:-rabbitmq}
       - RABBIT_USER=${RABBIT_USER:-root}
       - RABBIT_PASSWORD=${RABBIT_PASSWORD:-admin}
       - RABBIT_EXCHANGE=${RABBIT_EXCHANGE:-points-request-exchange}
