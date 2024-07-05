@@ -1,13 +1,17 @@
 package uol.compass.payments.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(name = "Payment response", description = "The response for payment operations.")
 public class PaymentResponse {
 
@@ -22,5 +26,9 @@ public class PaymentResponse {
 
     @Schema(description = "The value of the payment.", example = "100")
     private Integer value;
+
+    @Schema(description = "The creation date of the payment.", example = "05/07/2024")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date createdAt;
 
 }

@@ -127,8 +127,8 @@
                 <configuration>
                     <excludes>
                         <exclude>uol/compass/calculate/CalculateApplication.class</exclude>
-                        <exclude>uol/compass/calculate/CustomerApplication.class</exclude>
-                        <exclude>uol/compass/calculate/PaymentApplication.class</exclude>
+                        <exclude>uol/compass/customer/CustomerApplication.class</exclude>
+                        <exclude>uol/compass/payments/PaymentsApplication.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -69,7 +69,7 @@ public class CustomerServiceTest {
     public void testCreateCustomerAlreadyExists() {
         final var request = CustomerUtil.getRequest();
 
-        when(this.customerRepository.existsByEmailIgnoreCaseOrCpf(anyString(), anyString())).thenThrow(CustomerAlreadyExistsException.class);
+        when(this.customerRepository.existsByEmailIgnoreCaseOrCpf(anyString(), anyString())).thenReturn(true);
         Assertions.assertThrows(CustomerAlreadyExistsException.class, () -> service.createCustomer(request));
     }
 
@@ -141,7 +141,7 @@ public class CustomerServiceTest {
         final var request = CustomerUtil.getUpdateRequest();
 
         when(this.customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
-        when(this.customerRepository.existsByEmailOrCpf(anyString(), anyString(), anyLong())).thenThrow(CustomerAlreadyExistsException.class);
+        when(this.customerRepository.existsByEmailOrCpf(anyString(), anyString(), anyLong())).thenReturn(true);
         Assertions.assertThrows(CustomerAlreadyExistsException.class, () -> service.updateCustomer(customer.getId(), request));
     }
 
@@ -151,7 +151,7 @@ public class CustomerServiceTest {
         final var customer = CustomerUtil.getCustomer();
 
         when(this.customerRepository.deleteCustomerById(anyLong())).thenReturn(1);
-        Assertions.assertEquals(1, this.customerRepository.deleteCustomerById(customer.getId()));
+        this.service.deleteCustomer(customer.getId());
     }
 
     @Test
@@ -162,6 +162,5 @@ public class CustomerServiceTest {
         when(this.customerRepository.deleteCustomerById(anyLong())).thenReturn(0);
         Assertions.assertThrows(CustomerNotFoundException.class, () -> service.deleteCustomer(customer.getId()));
     }
-
 
 }

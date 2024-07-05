@@ -1,5 +1,6 @@
 package uol.compass.customer.service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uol.compass.customer.configuration.ObjectMapperConfiguration;
+import uol.compass.customer.dto.request.PointsRequest;
 import uol.compass.customer.repository.CustomerRepository;
 import uol.compass.customer.service.impl.RabbitMessagingServiceImpl;
 import uol.compass.customer.util.PointsUtil;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Tests for Messaging Service")
@@ -38,6 +42,15 @@ public class MessagingServiceTest {
     void testReceivePoints() throws JsonProcessingException {
         final var message = this.mapper.writeValueAsString(PointsUtil.getRequest());
         this.service.receivePoints(message);
+    }
+
+    @Test
+    @DisplayName("Service receive points with invalid message")
+    void testReceivePointsInvalidMessage() throws JsonProcessingException {
+        final var spy = spy(this.mapper);
+
+        doThrow(JsonParseException.class).when(spy).readValue(anyString(), eq(PointsRequest.class));
+        this.service.receivePoints(anyString());
     }
 
 }

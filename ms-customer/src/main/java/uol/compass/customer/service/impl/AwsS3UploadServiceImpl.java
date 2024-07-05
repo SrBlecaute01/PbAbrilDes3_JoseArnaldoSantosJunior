@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AwsS3UploadService implements FileUploadService {
+public class AwsS3UploadServiceImpl implements FileUploadService {
 
     private final S3Client client;
 
