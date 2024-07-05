@@ -1,4 +1,4 @@
-package uol.compass.calculate.configuration;
+package uol.compass.payments.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.DisplayName;
