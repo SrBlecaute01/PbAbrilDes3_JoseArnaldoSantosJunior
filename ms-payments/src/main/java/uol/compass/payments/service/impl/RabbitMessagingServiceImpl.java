@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RabbitMessagingServiceImpl implements MessagingService {
             this.template.convertAndSend(this.exchangeName, this.routingKey, json);
         } catch (JsonProcessingException exception) {
             log.error("Error while converting object to json", exception);
-        } catch (Exception exception) {
+        } catch (AmqpException exception) {
             log.error("Error while sending message", exception);
         }
     }

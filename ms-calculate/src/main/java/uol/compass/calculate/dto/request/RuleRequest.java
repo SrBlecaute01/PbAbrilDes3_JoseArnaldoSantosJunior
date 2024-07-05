@@ -3,6 +3,7 @@ package uol.compass.calculate.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(name = "Rule request", description = "Request body to create or update a rule.")
 public class RuleRequest {
 
