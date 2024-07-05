@@ -12,7 +12,7 @@ public class OpenApiConfigurationTest {
     private final OpenApiConfiguration configuration = new OpenApiConfiguration();
 
     @Test
-    @DisplayName("Test for OpenApi configuration")
+    @DisplayName("Configuration OpenAPI instance")
     void testOpenApiConfiguration() {
         final var openApi = this.configuration.openAPI();
         assertThat(openApi).isInstanceOf(OpenAPI.class);
