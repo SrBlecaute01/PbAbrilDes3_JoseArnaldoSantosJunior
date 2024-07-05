@@ -7,6 +7,7 @@
         <groupId>uol.compass</groupId>
         <artifactId>challenge</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <name>ms-payments</name>
