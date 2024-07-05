@@ -22,6 +22,7 @@
         <module>ms-customer</module>
         <module>ms-payments</module>
         <module>ms-calculate</module>
+        <module>code-coverage</module>
     </modules>
 
     <properties>
@@ -137,8 +138,15 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
+                        <id>report-test</id>
                         <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report-verify</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
