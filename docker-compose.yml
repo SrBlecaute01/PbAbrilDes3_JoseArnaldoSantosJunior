@@ -1,0 +1,117 @@
+version: "3.7"
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.13-management
+    restart: always
+    networks:
+      - challenge
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBIT_USER:-root}
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_PASSWORD:-admin}
+
+  ms-calculate:
+    container_name: ms-calculate
+    build:
+      context: .
+      dockerfile: ms-calculate/Dockerfile
+    image: ms-calculate
+    restart: always
+    networks:
+      - challenge
+    volumes:
+      - ms-calculate:/app
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-compass}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-admin}
+
+  ms-customer:
+    container_name: ms-customer
+    build:
+      context: .
+      dockerfile: ms-customer/Dockerfile
+    image: ms-customer
+    restart: always
+    networks:
+      - challenge
+    volumes:
+      - ms-customer:/app
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+    environment:
+      - SERVER_PORT=8081
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-compass}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-admin}
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY:-}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY:-}
+      - AWS_ACCESS_TOKEN=${AWS_ACCESS_TOKEN:-}
+      - AWS_BUCKET_NAME=${AWS_BUCKET_NAME:-}
+      - AWS_BUCKET_FOLDER=${AWS_BUCKET_FOLDER:-}
+      - AWS_REGION=${AWS_REGION:-}
+      - RABBIT_HOST=${RABBIT_HOST:-rabbitmq}
+      - RABBIT_USER=${RABBIT_USER:-root}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD:-admin}
+      - RABBIT_QUEUE=${RABBIT_QUEUE:-points-request-queue}
+
+  ms-payments:
+    container_name: ms-payments
+    build:
+      context: .
+      dockerfile: ms-payments/Dockerfile
+    image: ms-payments
+    restart: always
+    networks:
+      - challenge
+    volumes:
+      - ms-payments:/app
+    ports:
+      - "8082:8082"
+    depends_on:
+      - rabbitmq
+      - ms-calculate
+      - ms-customer
+    environment:
+      - SERVER_PORT=8082
+      - DB_HOST=${DB_HOST:-localhost}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_NAME=${DB_NAME:-compass}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-admin}
+      - CALCULATE_HOST=${CALCULATE_HOST:-http://ms-calculate:8080}
+      - CUSTOMER_HOST=${CUSTOMER_HOST:-http://ms-customer:8081}
+      - RABBIT_HOST=${RABBIT_HOST:-rabbitmq}
+      - RABBIT_USER=${RABBIT_USER:-root}
+      - RABBIT_PASSWORD=${RABBIT_PASSWORD:-admin}
+      - RABBIT_EXCHANGE=${RABBIT_EXCHANGE:-points-request-exchange}
+      - RABBIT_ROUTING_KEY=${RABBIT_ROUTING_KEY:-points-request-key}
+
+networks:
+  challenge:
+    name: challenge
+
+volumes:
+  rabbitmq-data:
+    name: rabbitmq
+  ms-payments:
+    name: ms-payments
+  ms-calculate:
+    name: ms-calculate
+  ms-customer:
+    name: ms-customer
