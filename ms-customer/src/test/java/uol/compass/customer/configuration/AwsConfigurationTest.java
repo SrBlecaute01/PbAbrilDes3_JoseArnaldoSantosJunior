@@ -3,6 +3,7 @@ package uol.compass.customer.configuration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -17,6 +18,8 @@ public class AwsConfigurationTest {
     @Test
     @DisplayName("Configuration S3Client instance")
     public void testAmazonS3() {
+        ReflectionTestUtils.setField(this.configuration, "region", "us-east-1");
+
         Mockito.mockStatic(AwsSessionCredentials.class)
                 .when(() -> AwsSessionCredentials.create(any(), any(), any()))
                 .thenReturn(Mockito.mock(AwsSessionCredentials.class));
